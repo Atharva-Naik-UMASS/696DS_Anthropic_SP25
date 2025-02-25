@@ -4,6 +4,7 @@ from rouge_score import rouge_scorer
 from nltk.translate.bleu_score import corpus_bleu
 from sklearn.metrics import accuracy_score
 import numpy as np
+import os
 
 def compute_rouge(reference, hypothesis):
     scorer = rouge_scorer.RougeScorer(["rouge1", "rouge2", "rougeL"], use_stemmer=True)
@@ -49,38 +50,48 @@ def evaluate(args):
     total_generated_length = 0
     total_target_length = 0
     total_rows = len(test_data)
-
-    # Iterate through the dataset assuming they match by index
+    total_scores = {"rouge1": [], "rouge2": [], "rougeL": [], "bleu": [], "accuracy": [], "target_length": [], "generated_length": []}
+    
     for index, row in test_data.iterrows():
         target = row[args.target_field]
         output = generated_data.iloc[index][args.generated_field]
-
         score_data = {}
 
-        # Evaluate each metric based on the provided tests
         if 'rouge' in args.tests:
             rouge_scores = compute_rouge(target, output)
             score_data['rouge1'] = rouge_scores['rouge1'].fmeasure
             score_data['rouge2'] = rouge_scores['rouge2'].fmeasure
             score_data['rougeL'] = rouge_scores['rougeL'].fmeasure
+            total_scores["rouge1"].append(score_data['rouge1'])
+            total_scores["rouge2"].append(score_data['rouge2'])
+            total_scores["rougeL"].append(score_data['rougeL'])
 
         if 'bleu' in args.tests:
             bleu_score = compute_bleu([target], [output])
             score_data['bleu'] = bleu_score
+            total_scores["bleu"].append(bleu_score)
 
         if 'accuracy' in args.tests:
-            accuracy = compute_accuracy([target], [output])
+            accuracy = 1 if target == output else 0
             score_data['accuracy'] = accuracy
+            total_scores["accuracy"].append(accuracy)
 
         if 'length' in args.tests:
             target_len, generated_len = compute_length(target, output)
-            score_data['avg_target_length'] = target_len
-            score_data['avg_generated_length'] = generated_len
+            score_data['target_length'] = target_len
+            score_data['generated_length'] = generated_len
+            total_scores["target_length"].append(target_len)
+            total_scores["generated_length"].append(generated_len)
 
         results.append(score_data)
-
+        
     # Add average length results to the output file
     results_df = pd.DataFrame(results)
+    # Ensure output CSV file is created if it doesn't exist
+    if not os.path.exists(args.output_csv):
+        with open(args.output_csv, 'w') as f:
+            pass  # Just create an empty file
+    
 
     # Save results to output CSV
     results_df.to_csv(args.output_csv, index=False)
