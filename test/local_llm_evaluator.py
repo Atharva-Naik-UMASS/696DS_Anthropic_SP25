@@ -15,31 +15,32 @@ def process_csv(input_csv, output_csv, model_dir):
         lambda row: f"""<|begin_of_text|><|start_header_id|>system<|end_header_id|>
 Your job is to check whether the AI's answer is correct. Compare it with the correct answer and score it as either 0 if the AI's answer is wrong or 1 if it is correct. DO NOT provide any explanations.<|eot_id|><|start_header_id|>user<|end_header_id|>
 Correct Answer: {row['response']}
-AI Answer: {row['generated']}<|eot_id|><|start_header_id|>assistant<|end_header_id|>""",
+AI Answer: {row['generated']}<|eot_id|><|start_header_id|>assistant<|end_header_id|>Score: """,
         axis=1
     )
     input_data = df['prompt'].tolist()
     llm = LLM(model=model_dir,  dtype="float16", enable_prefix_caching=False, enable_chunked_prefill=False) #enable_prefix_caching=False, enable_chunked_prefill=Fals for v100
     sampling_params = SamplingParams(temperature=0.5, max_tokens = 2048)
     generated_outputs = llm.generate(input_data, sampling_params)
+    # Convert outputs to scores, setting invalid responses to -1
+    df['result'] = [
+        output.outputs[0].text.strip() for output in generated_outputs
+    ]  
     df['score'] = [
         int(output.outputs[0].text.strip())  # Try to convert to integer
         if output.outputs[0].text.strip().isdigit()  # Check if it's a valid integer string
-        else 0  # Default to 0 if conversion fails
+        else -1  # Set invalid responses to -1
         for output in generated_outputs
     ]    
     df.to_csv(output_csv, index=False)
-    # df['score'] = pd.to_numeric(df['score'], errors='coerce').fillna(0).astype(int)
-    # Count the number of 1s in the 'score' column
-    total_score = df['score'].sum()
-
-    # Calculate accuracy (percentage of 1s)
-    total_rows = len(df)
-    accuracy = (total_score / total_rows) * 100
+    # Calculate the total score, excluding invalid responses (-1)
+    valid_scores = df[df['score'] != -1]['score']  # Filter out -1
+    total_score = valid_scores.sum()  # Sum only valid scores
+    total_rows = len(valid_scores)  # Count only valid responses
 
     # Print results
     print(f"Total Score: {total_score}/{total_rows}")
-    print(f"Accuracy: {accuracy:.2f}%")
+    print(f"Accuracy: {(total_score/total_rows)*100:.2f}%")
     print(f"\nResults saved to {output_csv}")
 
 def main():
