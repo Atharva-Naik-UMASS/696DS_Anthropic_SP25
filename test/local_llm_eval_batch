@@ -11,5 +11,6 @@ echo "#######################"
 
 module load conda/latest
 conda activate /work/pi_wenlongzhao_umass_edu/6/envs/anthro_finetune
-python test/local_llm_evaluator.py --input_csv /home/sgovindan_umass_edu/696DS_Anthropic_SP25/outputs/generated_output_adapter_glaive_old2.csv \
-                    --model_dir /datasets/ai/llama3/hub/models--meta-llama--Meta-Llama-3.1-8B-Instruct/snapshots/5206a32e0bd3067aef1ce90f5528ade7d866253f 
+python test/local_llm_evaluator.py --input_csv /work/pi_wenlongzhao_umass_edu/6/outputs/generated_output_MathThenGlaive_adapter_glaive.csv \
+                    --model_dir /datasets/ai/llama3/hub/models--meta-llama--Meta-Llama-3.1-8B-Instruct/snapshots/5206a32e0bd3067aef1ce90f5528ade7d866253f \
+                    --output_csv  /work/pi_wenlongzhao_umass_edu/6/outputs/scored_results_MathThenGlaive_glaive.csv
