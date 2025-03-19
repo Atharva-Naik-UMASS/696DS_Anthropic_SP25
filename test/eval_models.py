@@ -65,9 +65,9 @@ def evaluate(args):
     results_df.to_csv(args.output_csv, index=False)
     print(f"Averaged results saved to {args.output_csv}")
     
-    total_scores_df = pd.DataFrame([total_scores])
-    total_scores_df.to_csv("total_scores.csv", index=False)
-    print(f"Averaged results saved to total_scores.csv")
+    # total_scores_df = pd.DataFrame([total_scores])
+    # total_scores_df.to_csv("total_scores.csv", index=False)
+    # print(f"Averaged results saved to total_scores.csv")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Evaluate NLP Models on generated outputs")
