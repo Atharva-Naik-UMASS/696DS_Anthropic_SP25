@@ -1,9 +1,10 @@
 #!/bin/bash
-#SBATCH --partition=gpu
-#SBATCH --gpus=1
-#SBATCH --cpus-per-task=2
-#SBATCH --mem=20GB
-#SBATCH --time=08:00:00
+#SBATCH --partition=gpu-preempt
+#SBATCH --gpus=a100:1
+#SBATCH --time=10:00:00
+#SBATCH --job-name=hindi_math-v1-r64       #Set the job name to "JobName"
+#SBATCH --ntasks-per-node=2      #Request 4 tasks/cores per node
+
 
 if [ $# -eq 0 ]; then
     echo "Usage: sbatch $0 <config_file_path>"
@@ -16,7 +17,6 @@ nvidia-smi
 echo "#######################"
 
 module load conda/latest
-conda activate anthro_finetune
+conda activate /work/pi_wenlongzhao_umass_edu/6/envs/anthro_finetune
 
-cd /work/pi_wenlongzhao_umass_edu/6/atharva/src/train
 python main.py $1
