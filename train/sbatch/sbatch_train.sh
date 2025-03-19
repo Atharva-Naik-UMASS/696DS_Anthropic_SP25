@@ -2,7 +2,7 @@
 #SBATCH --partition=gpu-preempt
 #SBATCH --gpus=a100:1
 #SBATCH --time=10:00:00
-#SBATCH --job-name=hindi_math-v1-r64       #Set the job name to "JobName"
+#SBATCH --job-name=amazon_v1_r64      #Set the job name to "JobName"
 #SBATCH --ntasks-per-node=2      #Request 4 tasks/cores per node
 
 
@@ -19,4 +19,8 @@ echo "#######################"
 module load conda/latest
 conda activate /work/pi_wenlongzhao_umass_edu/6/envs/anthro_finetune
 
-python main.py $1
+python main.py yaml_configs/$1
+
+## RUN: 
+## cd 696DS/Anthropic_SP25
+## sbatch sbatch/sbatch_train.sh <yaml_config_file_name>.yaml 

@@ -1,7 +1,7 @@
 # Required parameters (must be specified)
-data_dir: "/work/pi_wenlongzhao_umass_edu/6/datasets/hindi_math"
-datafile: "Transformed_hindi_math_train_s.csv"
-wandb_run_name: "hindi_math-v1-r64"
+data_dir: "/work/pi_wenlongzhao_umass_edu/6/datasets/amazon"
+datafile: "amazonTransformed_amazon_sentiment_train_small.csv"
+wandb_run_name: "amazon_v1_r64"
 
 # Model and data parameters (with defaults)
 model_path: "/datasets/ai/llama3/hub/models--meta-llama--Llama-3.2-1B/snapshots/4e20de362430cd3b72f300e6b0f18e50e7166e08"
