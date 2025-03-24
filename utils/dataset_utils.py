@@ -28,71 +28,73 @@ class Transform_Data:
             incited_response = 'Sentiment'
             columns = ['Sentence', 'Sentiment']
 
-        if type == 'meta_math_qa':
+        elif type == 'meta_math_qa':
             prompt = ""
             incited_response = 'Answer'
             columns = ['query', 'response']
 
-        if type == 'paws':
+        elif type == 'paws':
             prompt = "Are the following two sentences paraphrases of each other?"
             incited_response = 'Answer'
             columns = ['Sentences', 'label']
 
-        if type == 'cot':
+        elif type == 'cot':
             prompt = ""
             incited_response = "Response"
             columns = ['prompt', 'response']
 
-        if type == 'glaive_code':
+        elif type == 'glaive_code':
             prompt = ""
             incited_response = "Answer"
             columns = ['question', 'answer']
 
-        if type == 'goat':
+        elif type == 'goat':
             prompt = ""
             incited_response = "Answer"
             columns = ['instruction', 'answer']
 
-        if type == 'MagicCoder':
+        elif type == 'MagicCoder':
             prompt = ""
             incited_response = "Answer"
             columns = ['problem', 'solution']
 
-        if type == 'imdb':
+        elif type == 'imdb':
             prompt = "What is the sentiment of the below sentence?"
             incited_response = "Sentiment"
             columns = ['text', 'label']
 
-        if type == 'flipkart':
+        elif type == 'flipkart':
             prompt = "What is the sentiment of the below sentence? Positive, negative or neutral?"
             incited_response = "Sentiment"
             columns = ['input', 'output']
         
-        if type == 'pile':
+        elif type == 'pile':
             prompt = "Is the following sentence toxic?"
             incited_response = "Toxicity"
             columns = ['text', 'toxicity']
 
-        if type == 'gsm8k':
+        elif type == 'gsm8k':
             prompt = ""
             incited_response = 'Answer'
             columns = ['question', 'answer']
 
 
-        if type == 'hindi_math_reasoning':
+        elif type == 'hindi_math_reasoning':
             prompt = ""
             incited_response = 'Answer'
             columns = ['input', 'output']
-
-
+        
+        elif type == 'amazon':
+            prompt = "What is the sentiment of the following amazon review? Provide a rating from 1 to 5 stars, where 1 is very negative and 5 is very positive."
+            incited_response = "Rating"
+            columns = ['review_text','class_index']
+            
         return prompt, incited_response, columns
-
+ 
     def transform(self, test):
         # this function assumes csv inputs
         df = pd.read_csv(self.input_file_path)
-        prompt, incited_response, columns = self.type_to_prompt_mapper(
-            self.type)
-
+        prompt, incited_response, columns = self.type_to_prompt_mapper(self.type)
         output_file_path = self.output_file_path+'Transformed_' + \
             self.input_file_path.split('/')[-1].split('.')[0]+'.csv'
 
@@ -106,6 +108,7 @@ class Transform_Data:
                     f"{incited_response}:\n"
                     f"{row[columns[1]]}<|end_of_text|>"
                 ), axis=1)
+
             except Exception as e:
                 logger.error(
                     f"Could not tranform the train split of dataset. Error: {e}")
@@ -124,10 +127,12 @@ class Transform_Data:
                     f"Could not transform the test split of dataset. Error: {e}")
 
         try:
+
             df.to_csv(output_file_path, index=False)
             print(
                 f'Formatted CSV for type {self.type} saved in {output_file_path}. Returning tranformed dataframe object.')
             return df
+
         except Exception as e:
             print(
                 f"Could not save the file in {output_file_path} post tranformation. Error: {e}")
