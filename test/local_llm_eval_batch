@@ -14,10 +14,10 @@ conda activate /work/pi_wenlongzhao_umass_edu/6/envs/anthro_finetune
 
 export HF_HOME="/project/pi_wenlongzhao_umass_edu/6/models"
 
-python test/local_llm_evaluator.py --input_csv /work/pi_wenlongzhao_umass_edu/6/outputs/generated_output_goatThenMagicoder_adapter_magicoder.csv\
+python test/local_llm_evaluator.py --input_csv /work/pi_wenlongzhao_umass_edu/6/outputs/generated_output_goat_adapter_gsm8k.csv \
                     --model_dir kosbu/Llama-3.3-70B-Instruct-AWQ \
-                    --groundtruth_column solution \
-                    --output_csv  /work/pi_wenlongzhao_umass_edu/6/outputs/scored_results/scored_results_goatmagicoder_magicoder.csv
+                    --groundtruth_column answer \
+                    --output_csv  /work/pi_wenlongzhao_umass_edu/6/outputs/scored_results/scored_results_goat_gsm8k_2.csv
 
 # python test/local_llm_evaluator.py --input_csv /work/pi_wenlongzhao_umass_edu/6/outputs/generated_output_glaive_adapter_glaive.csv \
 #                     --model_dir kosbu/Llama-3.3-70B-Instruct-AWQ \

@@ -10,10 +10,12 @@ def process_csv(input_csv, groundtruth_column, output_csv, model_dir):
     
     if groundtruth_column not in df.columns or 'generated' not in df.columns:
         raise ValueError(f"CSV must contain {groundtruth_column} and 'generated' columns")
-    
+
     df['prompt'] = df.apply(
         lambda row: f"""<|begin_of_text|><|start_header_id|>system<|end_header_id|>
 Your job is to check whether the AI's answer is correct. Compare it with the correct answer and score it as either 0 if the AI's answer is wrong or 1 if it is correct. DO NOT provide any explanations.<|eot_id|><|start_header_id|>user<|end_header_id|>
+### Original Question:
+{row['Text'].replace('<|begin_of_text|>', '').replace('Answer:', '')}
 ### Correct Answer: 
 {row[groundtruth_column]}
 ### AI's Answer:

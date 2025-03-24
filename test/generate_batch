@@ -13,10 +13,10 @@ module load conda/latest
 conda activate /work/pi_wenlongzhao_umass_edu/6/envs/anthro_finetune
 pip install vllm
 python test/generate.py --model_dir /datasets/ai/llama3/hub/models--meta-llama--Llama-3.2-1B/snapshots/4e20de362430cd3b72f300e6b0f18e50e7166e08 \
-                 --adapter_dir /project/pi_wenlongzhao_umass_edu/6/adapters/goat-then-Magicoder-v1-r64 \
+                 --adapter_dir /project/pi_wenlongzhao_umass_edu/6/adapters/goat-v2-r64 \
                  --test_csv /work/pi_wenlongzhao_umass_edu/6/datasets/Magicoder/Magicoder_test_s_F.csv \
                  --input_field Text \
                  --shots 0 \
                  --balance_label toxicity \
                  --train_csv /work/pi_wenlongzhao_umass_edu/6/datasets/pile/pile_train_s_F.csv \
-                 --output_csv /work/pi_wenlongzhao_umass_edu/6/outputs/generated_output_goatThenMagicoder_adapter_magicoder.csv
+                 --output_csv /work/pi_wenlongzhao_umass_edu/6/outputs/generated_output_goat_adapter_magicoder.csv
