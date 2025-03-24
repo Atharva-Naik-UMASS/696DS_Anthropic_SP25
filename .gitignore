@@ -3,3 +3,4 @@ outputs
 /train/sbatch/*.out
 /train/wandb
 /train/*.out
+train/unsloth_compiled_cache/
