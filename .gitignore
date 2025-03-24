@@ -3,3 +3,8 @@ outputs
 /train/sbatch/*.out
 /train/wandb
 /train/*.out
+/train/unsloth_compiled_cache/*
+/utils/__pycache__/*
+/utils/.ipynb_checkpoints/*
+/utils/*.csv
+/utils/temp.ipynb
