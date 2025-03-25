@@ -1,7 +1,6 @@
 #!/bin/bash
 #SBATCH --partition=gpu-preempt
-#SBATCH --gpus=a100:1
-#SBATCH --constraint=a100-80g
+#SBATCH --gpus=l40s:1
 #SBATCH --time=08:00:00
 #SBATCH --mem=40G
 
@@ -17,7 +16,7 @@ export HF_HOME="/project/pi_wenlongzhao_umass_edu/6/models"
 python test/local_llm_evaluator.py --input_csv /work/pi_wenlongzhao_umass_edu/6/outputs/generated_output_goat_adapter_gsm8k.csv \
                     --model_dir kosbu/Llama-3.3-70B-Instruct-AWQ \
                     --groundtruth_column answer \
-                    --output_csv  /work/pi_wenlongzhao_umass_edu/6/outputs/scored_results/scored_results_goat_gsm8k_2.csv
+                    --output_csv  /work/pi_wenlongzhao_umass_edu/6/outputs/scored_results/scored_results_goat_gsm8k_changed_1.csv
 
 # python test/local_llm_evaluator.py --input_csv /work/pi_wenlongzhao_umass_edu/6/outputs/generated_output_glaive_adapter_glaive.csv \
 #                     --model_dir kosbu/Llama-3.3-70B-Instruct-AWQ \
