@@ -7,11 +7,11 @@ import yaml
 
 
  def parse_score(text):
-     try:
-         answer_part = text.split('<answer>')[-1].split('</answer>')[0].strip()
-         return int(answer_part) if answer_part in {'0','1'} else -1
-     except:
-         return -1
+    try:
+        answer_part = text.split('<answer>')[-1].split('</answer>')[0].strip()
+        return int(answer_part) if answer_part in {'0','1'} else -1
+    except:
+        return -1
 
 def load_yaml(path):
     with open(path, 'r') as f:
