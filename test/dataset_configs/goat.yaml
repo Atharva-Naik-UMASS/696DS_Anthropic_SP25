@@ -1,0 +1,4 @@
+train_csv: /work/pi_wenlongzhao_umass_edu/6/datasets/goat/goat_test_s_F.csv
+balance_label: answer
+groundtruth_column: answer
+train_csv: /work/pi_wenlongzhao_umass_edu/6/datasets/goat/goat_train_s_F.csv

@@ -1,0 +1,6 @@
+defaults:
+- ../base_configs/local_llm_eval_base.yaml
+- ../dataset_configs/goat.yaml
+
+input_csv: /work/pi_wenlongzhao_umass_edu/6/outputs/generated_output_goatThenMagicoder_adapter_goat.csv
+output_csv: /work/pi_wenlongzhao_umass_edu/6/outputs/scored_results_judge_v2/scored_results_goatThenMagicoder_goat.csv

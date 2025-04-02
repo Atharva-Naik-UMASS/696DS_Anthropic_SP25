@@ -1,0 +1,7 @@
+defaults:
+- ../base_configs/generate_base.yaml
+- ../adapter_configs/magicoder.yaml
+- ../dataset_configs/magicoder.yaml
+
+shots: 0
+output_csv: /work/pi_wenlongzhao_umass_edu/6/outputs/generated_output_goatThenMagicoder_adapter_magicoder.csv

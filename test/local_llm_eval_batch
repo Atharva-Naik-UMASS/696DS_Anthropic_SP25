@@ -1,8 +1,13 @@
 #!/bin/bash
 #SBATCH --partition=gpu-preempt
-#SBATCH --gpus=l40s:1
+#SBATCH --gpus=a100:1
 #SBATCH --time=08:00:00
 #SBATCH --mem=40G
+
+if [ $# -eq 0 ]; then
+    echo "Usage: sbatch $0 <config_file_path>"
+    exit 1
+fi
 
 # Print GPU info
 echo "### GPU Information ###"
@@ -13,67 +18,4 @@ conda activate /work/pi_wenlongzhao_umass_edu/6/envs/anthro_finetune
 
 export HF_HOME="/project/pi_wenlongzhao_umass_edu/6/models"
 
-python test/local_llm_evaluator.py --input_csv /work/pi_wenlongzhao_umass_edu/6/outputs/generated_output_goat_adapter_gsm8k.csv \
-                    --model_dir kosbu/Llama-3.3-70B-Instruct-AWQ \
-                    --groundtruth_column answer \
-                    --output_csv  /work/pi_wenlongzhao_umass_edu/6/outputs/scored_results/scored_results_goat_gsm8k_changed_1.csv
-
-# python test/local_llm_evaluator.py --input_csv /work/pi_wenlongzhao_umass_edu/6/outputs/generated_output_glaive_adapter_glaive.csv \
-#                     --model_dir kosbu/Llama-3.3-70B-Instruct-AWQ \
-#                     --groundtruth_column response \
-#                     --output_csv  /work/pi_wenlongzhao_umass_edu/6/outputs/scored_results/scored_results_glaive_glaive.csv      
-
-# python test/local_llm_evaluator.py --input_csv /work/pi_wenlongzhao_umass_edu/6/outputs/generated_output_glaive_adapter_math.csv \
-#                     --model_dir kosbu/Llama-3.3-70B-Instruct-AWQ \
-#                     --groundtruth_column response \
-#                     --output_csv  /work/pi_wenlongzhao_umass_edu/6/outputs/scored_results/scored_results_glaive_math.csv      
-
-# python test/local_llm_evaluator.py --input_csv /work/pi_wenlongzhao_umass_edu/6/outputs/generated_output_baseline_imdb.csv \
-#                     --model_dir kosbu/Llama-3.3-70B-Instruct-AWQ \
-#                     --groundtruth_column label \
-#                     --output_csv  /work/pi_wenlongzhao_umass_edu/6/outputs/scored_results/scored_results_base_imdb.csv  
-
-# python test/local_llm_evaluator.py --input_csv /work/pi_wenlongzhao_umass_edu/6/outputs/generated_output_baseline_magicoder.csv \
-#                     --model_dir kosbu/Llama-3.3-70B-Instruct-AWQ \
-#                     --groundtruth_column solution \
-#                     --output_csv  /work/pi_wenlongzhao_umass_edu/6/outputs/scored_results/scored_results_base_magicoder.csv    
-
-# python test/local_llm_evaluator.py --input_csv /work/pi_wenlongzhao_umass_edu/6/outputs/generated_output_baseline_PAWS.csv \
-#                     --model_dir kosbu/Llama-3.3-70B-Instruct-AWQ \
-#                     --groundtruth_column response \
-#                     --output_csv  /work/pi_wenlongzhao_umass_edu/6/outputs/scored_results/scored_results_base_PAWS.csv 
-
-# python test/local_llm_evaluator.py --input_csv /work/pi_wenlongzhao_umass_edu/6/outputs/generated_output_magicoder_adapter_magicoder.csv \
-#                     --model_dir kosbu/Llama-3.3-70B-Instruct-AWQ \
-#                     --groundtruth_column solution \
-#                     --output_csv  /work/pi_wenlongzhao_umass_edu/6/outputs/scored_results/scored_results_magicoder_magicoder.csv            
-
-# python test/local_llm_evaluator.py --input_csv /work/pi_wenlongzhao_umass_edu/6/outputs/generated_output_magicoder_adapter_math.csv \
-#                     --model_dir kosbu/Llama-3.3-70B-Instruct-AWQ \
-#                     --groundtruth_column response \
-#                     --output_csv  /work/pi_wenlongzhao_umass_edu/6/outputs/scored_results/scored_results_magicoder_math.csv            
-
-# python test/local_llm_evaluator.py --input_csv /work/pi_wenlongzhao_umass_edu/6/outputs/generated_output_math_adapter_glaive.csv \
-#                     --model_dir kosbu/Llama-3.3-70B-Instruct-AWQ \
-#                     --groundtruth_column response \
-#                     --output_csv  /work/pi_wenlongzhao_umass_edu/6/outputs/scored_results/scored_results_math_glaive.csv     
-
-# python test/local_llm_evaluator.py --input_csv /work/pi_wenlongzhao_umass_edu/6/outputs/generated_output_math_adapter_magicoder.csv \
-#                     --model_dir kosbu/Llama-3.3-70B-Instruct-AWQ \
-#                     --groundtruth_column solution \
-#                     --output_csv  /work/pi_wenlongzhao_umass_edu/6/outputs/scored_results/scored_results_math_magicoder.csv            
-
-# python test/local_llm_evaluator.py --input_csv /work/pi_wenlongzhao_umass_edu/6/outputs/generated_output_math_adapter_math.csv \
-#                     --model_dir kosbu/Llama-3.3-70B-Instruct-AWQ \
-#                     --groundtruth_column response \
-#                     --output_csv  /work/pi_wenlongzhao_umass_edu/6/outputs/scored_results/scored_results_math_math.csv            
-
-# python test/local_llm_evaluator.py --input_csv /work/pi_wenlongzhao_umass_edu/6/outputs/generated_output_MathThenGlaive_adapter_glaive.csv \
-#                     --model_dir kosbu/Llama-3.3-70B-Instruct-AWQ \
-#                     --groundtruth_column response \
-#                     --output_csv  /work/pi_wenlongzhao_umass_edu/6/outputs/scored_results/scored_results_mathThenGlaive_glaive.csv            
-
-# python test/local_llm_evaluator.py --input_csv /work/pi_wenlongzhao_umass_edu/6/outputs/generated_output_MathThenGlaive_adapter_math.csv \
-#                     --model_dir kosbu/Llama-3.3-70B-Instruct-AWQ \
-#                     --groundtruth_column response \
-#                     --output_csv  /work/pi_wenlongzhao_umass_edu/6/outputs/scored_results/scored_results_mathThenGlaive_math.csv            
+python test/local_llm_evaluator.py test/local_llm_eval_configs/$1

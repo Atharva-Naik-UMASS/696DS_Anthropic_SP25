@@ -1,0 +1,4 @@
+test_csv: /work/pi_wenlongzhao_umass_edu/6/datasets/meta_math_qa/transformed_gsm8k_test.csv
+balance_label: solution
+groundtruth_column: solution
+train_csv: /work/pi_wenlongzhao_umass_edu/6/datasets/meta_math_qa/transformed_meta_math_qa_train_small.csv

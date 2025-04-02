@@ -1,0 +1,4 @@
+test_csv: /work/pi_wenlongzhao_umass_edu/6/datasets/pile/pile_test_s_F.csv
+balance_label: toxicity
+groundtruth_column: toxicity
+train_csv: /work/pi_wenlongzhao_umass_edu/6/datasets/pile/pile_train_s_F.csv
