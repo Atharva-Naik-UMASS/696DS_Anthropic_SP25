@@ -1,6 +1,6 @@
 defaults:
 - ../base_configs/generate_base.yaml
-- ../adapter_configs/magicoder.yaml
+- ../adapter_configs/goatThenMagicoder.yaml
 - ../dataset_configs/magicoder.yaml
 
 shots: 0
