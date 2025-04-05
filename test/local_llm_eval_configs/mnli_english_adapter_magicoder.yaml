@@ -1,0 +1,6 @@
+defaults:
+- ../base_configs/local_llm_eval_base.yaml
+- ../dataset_configs/magicoder.yaml
+
+input_csv: /work/pi_wenlongzhao_umass_edu/6/outputs/generated_output_mnli_v3_adapter_magicoder.csv
+output_csv: /work/pi_wenlongzhao_umass_edu/6/outputs/scored_results_judge_v2/scored_results_mnli_v3_english_adapter_magicoder.csv

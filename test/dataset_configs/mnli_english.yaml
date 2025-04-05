@@ -1,0 +1,4 @@
+test_csv: /work/pi_wenlongzhao_umass_edu/6/datasets/mnli/iter2/Transformed_mnli_test.csv
+balance_label: label
+groundtruth_column: label
+train_csv: /work/pi_wenlongzhao_umass_edu/6/datasets/mnli/iter2/Transformed_mnli_train.csv

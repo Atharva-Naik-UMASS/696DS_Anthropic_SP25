@@ -1,0 +1,7 @@
+defaults:
+- ../base_configs/generate_base.yaml
+# - ../adapter_configs/mnli_english.yaml
+- ../dataset_configs/mnli_nums.yaml
+
+shots: 0
+output_csv: /work/pi_wenlongzhao_umass_edu/6/outputs/generated_output_base_adapter_mnli_nums.csv
