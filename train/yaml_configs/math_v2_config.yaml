@@ -1,0 +1,48 @@
+# Required parameters (must be specified)
+data_dir: "/work/pi_wenlongzhao_umass_edu/6/datasets/meta_math_qa"
+datafile: "meta_math_train.csv"
+wandb_run_name: "meta_math_v2"
+
+# Model and data parameters (with defaults)
+model_path: "/datasets/ai/llama3/hub/models--meta-llama--Llama-3.2-1B/snapshots/4e20de362430cd3b72f300e6b0f18e50e7166e08"
+# load_adapter: "/project/pi_wenlongzhao_umass_edu/6/adapters/transformed_paws_train_small"  # Optional: path to previously saved adapter
+split: "train"
+load_in_4bit: "False"
+max_seq_length: 2048
+dtype: "none"  # None for auto detection
+
+# LoRA parameters
+lora_rank: 64
+lora_alpha: 32
+lora_dropout: 0
+lora_bias: "none"
+use_gradient_checkpointing: "unsloth"
+use_rslora: false
+loftq_config: null
+use_peft: true
+target_modules: 
+  - "q_proj"
+  - "k_proj"
+  - "v_proj"
+  - "o_proj"
+  - "gate_proj"
+  - "up_proj"
+  - "down_proj"
+dataset_text_field: "Text"
+
+# Training parameters
+dataset_num_proc: 1
+packing: false
+# max_steps: 500
+num_train_epochs: 4
+per_device_train_batch_size: 4
+gradient_accumulation_steps: 8
+learning_rate: 5.0e-5
+warmup_steps: 100
+weight_decay: 0
+max_grad_norm: 1.0
+optim: "adamw_torch"
+lr_scheduler_type: "cosine"
+output_dir: "/project/pi_wenlongzhao_umass_edu/6/adapters/"
+report_to: "wandb"
+logging_steps: 1
