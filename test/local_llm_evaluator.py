@@ -6,6 +6,13 @@ from vllm import LLM, SamplingParams
 import yaml
 
 
+def parse_score(text):
+    try:
+        answer_part = text.split('<answer>')[-1].split('</answer>')[0].strip()
+        return int(answer_part) if answer_part in {'0','1'} else -1
+    except:
+        return -1
+
 def load_yaml(path):
     with open(path, 'r') as f:
         return yaml.safe_load(f)
@@ -91,8 +98,9 @@ Evaluate the AI's answer:<|eot_id|><|start_header_id|>assistant<|end_header_id|>
 def main():
     
     args = ArgParser()
-    print("STARTED EVAL", args.input_csv,
-          args.groundtruth_column, args.output_csv)
+    print("STARTED EVAL")
+    for key, value in vars(args).items():
+        print(f"{key}: {value}")
 
     process_csv(args.input_csv, args.groundtruth_column,
                 args.output_csv, args.model_dir)

@@ -1,10 +1,10 @@
 # Required parameters (must be specified)
-data_dir: "/work/pi_wenlongzhao_umass_edu/6/datasets/amazon"
-datafile: "amazonTransformed_amazon_sentiment_train_small.csv"
-wandb_run_name: "amazon_v3_r64"
+data_dir: "/work/pi_wenlongzhao_umass_edu/6/datasets/meta_math_qa"
+datafile: "meta_math_train.csv"
+wandb_run_name: "meta_math_v2"
 
 # Model and data parameters (with defaults)
-model_path: "/datasets/ai/llama3/hub/models--meta-llama--Llama-3.2-3B/snapshots/13afe5124825b4f3751f836b40dafda64c1ed062"
+model_path: "/datasets/ai/llama3/hub/models--meta-llama--Llama-3.2-1B/snapshots/4e20de362430cd3b72f300e6b0f18e50e7166e08"
 # load_adapter: "/project/pi_wenlongzhao_umass_edu/6/adapters/transformed_paws_train_small"  # Optional: path to previously saved adapter
 split: "train"
 load_in_4bit: "False"
@@ -35,8 +35,8 @@ dataset_num_proc: 1
 packing: false
 # max_steps: 500
 num_train_epochs: 4
-per_device_train_batch_size: 16
-gradient_accumulation_steps: 4
+per_device_train_batch_size: 4
+gradient_accumulation_steps: 8
 learning_rate: 5.0e-5
 warmup_steps: 100
 weight_decay: 0

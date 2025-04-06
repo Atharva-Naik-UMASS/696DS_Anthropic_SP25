@@ -17,5 +17,5 @@ module load conda/latest
 conda activate /work/pi_wenlongzhao_umass_edu/6/envs/anthro_finetune
 
 export HF_HOME="/project/pi_wenlongzhao_umass_edu/6/models"
-
-python test/local_llm_evaluator.py test/local_llm_eval_configs/$1
+export HF_HUB_OFFLINE=1
+python local_llm_evaluator.py local_llm_eval_configs/$1

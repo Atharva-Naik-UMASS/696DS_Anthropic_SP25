@@ -16,5 +16,5 @@ echo "#######################"
 
 module load conda/latest
 conda activate /work/pi_wenlongzhao_umass_edu/6/envs/anthro_finetune
-pip install vllm
-python test/generate.py test/generate_configs/$1
+# pip install vllm
+python generate.py generate_configs/$1

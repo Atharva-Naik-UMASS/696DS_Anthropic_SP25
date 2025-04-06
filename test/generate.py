@@ -101,9 +101,12 @@ def main():
     for key, value in vars(args).items():
         print(f"{key}: {value}")
     llm = None
-    if args.adapter_dir:
-        llm = LLM(model=args.model_dir, enable_lora=True, dtype="float16", max_lora_rank=64, enable_prefix_caching=False, enable_chunked_prefill=False, max_model_len=8192)
-    else:
+    try:
+        if args.adapter_dir:
+            llm = LLM(model=args.model_dir, enable_lora=True, dtype="float16", max_lora_rank=64, enable_prefix_caching=False, enable_chunked_prefill=False, max_model_len=8192)
+        else:
+            llm = LLM(model=args.model_dir,  dtype="float16", enable_prefix_caching=False, enable_chunked_prefill=False, max_model_len=8192) #enable_prefix_caching=False, enable_chunked_prefill=Fals for v100
+    except:
         llm = LLM(model=args.model_dir,  dtype="float16", enable_prefix_caching=False, enable_chunked_prefill=False, max_model_len=8192) #enable_prefix_caching=False, enable_chunked_prefill=Fals for v100
     # guided_decoding_params = GuidedDecodingParams(choice=["positive", "negative", "neutral"])
     # sampling_params = SamplingParams(temperature=0.7, top_p=0.95, max_tokens = 2048, guided_decoding=guided_decoding_params)
@@ -111,9 +114,12 @@ def main():
 
     df, input_data = load_test_data(args.test_csv, args.input_field, args.train_csv, args.balance_label, args.shots) 
     generated_outputs = None
-    if args.adapter_dir:   
-        generated_outputs = llm.generate(input_data, sampling_params, lora_request=LoRARequest("test_adapter", 1, args.adapter_dir))
-    else:
+    try:
+        if args.adapter_dir:   
+            generated_outputs = llm.generate(input_data, sampling_params, lora_request=LoRARequest("test_adapter", 1, args.adapter_dir))
+        else:
+            generated_outputs = llm.generate(input_data, sampling_params)
+    except:
         generated_outputs = llm.generate(input_data, sampling_params)
     df["generated"] = [output.outputs[0].text for output in generated_outputs]
 

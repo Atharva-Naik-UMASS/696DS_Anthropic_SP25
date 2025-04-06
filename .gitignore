@@ -9,3 +9,4 @@ outputs
 /utils/*.csv
 /utils/temp.ipynb
 train/unsloth_compiled_cache/
+/test/*.out
