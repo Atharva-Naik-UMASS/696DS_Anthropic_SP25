@@ -1,4 +1,4 @@
-train_csv: /work/pi_wenlongzhao_umass_edu/6/datasets/hindi_math/Transformed_hindi_math_test_s.csv
+test_csv: /work/pi_wenlongzhao_umass_edu/6/datasets/hindi_math/Transformed_hindi_math_test_s.csv
 balance_label: output
 groundtruth_column: output
 train_csv: /work/pi_wenlongzhao_umass_edu/6/datasets/hindi_math/Transformed_hindi_math_train_s.csv

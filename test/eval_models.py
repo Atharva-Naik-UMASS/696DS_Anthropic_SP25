@@ -21,7 +21,9 @@ def compute_length(target, generated):
 def evaluate(args):
     test_data = pd.read_csv(args.test_csv)
     generated_data = pd.read_csv(args.generated_output_csv)
-    
+    generated_data['score'] = (generated_data['label'] == generated_data['generated']).astype(int)
+    generated_data.to_csv(args.score_csv, index=False)
+    print("STORED: ", args.score_csv)
     if args.target_field not in test_data.columns:
         print(f"Error: '{args.target_field}' not found in the test CSV.")
         return
@@ -76,6 +78,7 @@ if __name__ == "__main__":
     parser.add_argument("target_field", type=str, help="Target column name in the test CSV")
     parser.add_argument("generated_field", type=str, help="Generated output column name in the generated CSV")
     parser.add_argument("output_csv", type=str, help="Path to the output CSV file with scores")
+    parser.add_argument("score_csv", type=str, help="Path to the score CSV file with score column")
     parser.add_argument("tests", type=str, nargs='+', choices=['rouge', 'bleu', 'accuracy', 'length'], help="List of tests to evaluate")
     
     args = parser.parse_args()

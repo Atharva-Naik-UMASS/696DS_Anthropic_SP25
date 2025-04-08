@@ -1,0 +1,6 @@
+defaults:
+- ../base_configs/local_llm_eval_base.yaml
+- ../dataset_configs/amazon.yaml
+
+input_csv: /work/pi_wenlongzhao_umass_edu/6/outputs/generated_output_amazon_adapter_amazon_v3.csv
+output_csv: /work/pi_wenlongzhao_umass_edu/6/outputs/scored_results_judge_v2/scored_results_amazon_amazon_3b.csv

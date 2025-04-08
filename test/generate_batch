@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --partition=gpu-preempt
-#SBATCH --gpus=a16:1
+#SBATCH --gpus=l40s:1
 #SBATCH --mem=40GB
 #SBATCH --time=08:00:00
 

@@ -1,4 +1,4 @@
-train_csv: /work/pi_wenlongzhao_umass_edu/6/datasets/amazon/amazonTransformed_amazon_sentiment_test_small.csv
+test_csv: /work/pi_wenlongzhao_umass_edu/6/datasets/amazon/amazonTransformed_amazon_sentiment_test_small.csv
 balance_label: class_index
 groundtruth_column: class_index
 train_csv: /work/pi_wenlongzhao_umass_edu/6/datasets/amazon/amazonTransformed_amazon_sentiment_train_small.csv

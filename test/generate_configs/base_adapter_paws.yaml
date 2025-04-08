@@ -1,0 +1,7 @@
+defaults:
+- ../base_configs/generate_base.yaml
+- ../dataset_configs/paws.yaml
+
+constrained_choice: ["0", "1"]
+shots: 0
+output_csv: /project/pi_wenlongzhao_umass_edu/6/outputs/results_3b/generated/generated_output_base_adapter_paws_guided.csv

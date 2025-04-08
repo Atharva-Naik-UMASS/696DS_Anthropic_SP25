@@ -1,4 +1,4 @@
-train_csv: /work/pi_wenlongzhao_umass_edu/6/datasets/flipkart/flipkart_test_s_F.csv
+test_csv: /work/pi_wenlongzhao_umass_edu/6/datasets/flipkart/flipkart_test_s_F.csv
 balance_label: output
 groundtruth_column: output
 train_csv: /work/pi_wenlongzhao_umass_edu/6/datasets/flipkart/flipkart_train_s_F.csv

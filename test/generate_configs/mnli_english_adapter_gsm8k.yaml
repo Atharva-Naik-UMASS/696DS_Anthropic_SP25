@@ -4,4 +4,4 @@ defaults:
 - ../dataset_configs/gsm8k.yaml
 
 shots: 0
-output_csv: /work/pi_wenlongzhao_umass_edu/6/outputs/generated_output_mnli_english_adapter_gsm8k.csv
+output_csv: /project/pi_wenlongzhao_umass_edu/6/outputs/results_3b/generated/generated_output_mnli_english_adapter_gsm8k.csv

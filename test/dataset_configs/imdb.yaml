@@ -1,4 +1,4 @@
-train_csv: /work/pi_wenlongzhao_umass_edu/6/datasets/imdb/IMDB_test_s_F.csv
+test_csv: /work/pi_wenlongzhao_umass_edu/6/datasets/imdb/IMDB_test_s_F_prompt.csv
 balance_label: label
 groundtruth_column: label
 train_csv: /work/pi_wenlongzhao_umass_edu/6/datasets/imdb/IMDB_train_s_F.csv

@@ -1,4 +1,4 @@
-train_csv: /work/pi_wenlongzhao_umass_edu/6/datasets/paws/PAWS_test_2000.csv
+test_csv: /work/pi_wenlongzhao_umass_edu/6/datasets/paws/PAWS_test_2000_prompt.csv
 balance_label: label
 groundtruth_column: label
 train_csv: /work/pi_wenlongzhao_umass_edu/6/datasets/paws/transformed_paws_train_small.csv

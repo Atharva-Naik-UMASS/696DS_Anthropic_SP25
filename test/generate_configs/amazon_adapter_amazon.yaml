@@ -1,0 +1,7 @@
+defaults:
+- ../base_configs/generate_base.yaml
+- ../adapter_configs/amazon.yaml
+- ../dataset_configs/amazon.yaml
+
+shots: 0
+output_csv: /work/pi_wenlongzhao_umass_edu/6/outputs/generated_output_amazon_adapter_amazon_v3_guided.csv

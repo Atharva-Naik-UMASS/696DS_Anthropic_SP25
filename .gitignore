@@ -10,3 +10,4 @@ outputs
 /utils/temp.ipynb
 train/unsloth_compiled_cache/
 /test/*.out
+slurm-*
