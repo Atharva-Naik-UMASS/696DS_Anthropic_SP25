@@ -21,7 +21,7 @@ def compute_length(target, generated):
 def evaluate(args):
     test_data = pd.read_csv(args.test_csv)
     generated_data = pd.read_csv(args.generated_output_csv)
-    generated_data['score'] = (generated_data['label'] == generated_data['generated']).astype(int)
+    generated_data['score'] = (generated_data[args.target_field] == generated_data[args.generated_field]).astype(int)
     generated_data.to_csv(args.score_csv, index=False)
     print("STORED: ", args.score_csv)
     if args.target_field not in test_data.columns:

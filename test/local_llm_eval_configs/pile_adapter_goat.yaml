@@ -1,0 +1,6 @@
+defaults:
+- ../base_configs/local_llm_eval_base.yaml
+- ../dataset_configs/goat.yaml
+
+input_csv: /project/pi_wenlongzhao_umass_edu/6/outputs/results_3b/generated/generated_output_pile_adapter_goat.csv
+output_csv: /project/pi_wenlongzhao_umass_edu/6/outputs/results_3b/scored_results/scored_results_pile_goat.csv
