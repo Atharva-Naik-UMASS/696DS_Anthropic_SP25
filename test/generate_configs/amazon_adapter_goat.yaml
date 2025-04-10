@@ -1,0 +1,7 @@
+defaults:
+- ../base_configs/generate_base.yaml
+- ../adapter_configs/amazon.yaml
+- ../dataset_configs/goat.yaml
+
+shots: 0
+output_csv: /project/pi_wenlongzhao_umass_edu/6/outputs/results_3b/generated/generated_output_amazon_adapter_goat.csv
