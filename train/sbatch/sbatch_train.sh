@@ -1,11 +1,11 @@
 #!/bin/bash
 #SBATCH --partition=gpu-preempt
-#SBATCH --gpus=l40s:1
-#SBATCH --time=1:00:00
-#SBATCH --job-name=amazon_v3_r64     #IMPORTANT Set the job name to "JobName"
-#SBATCH --ntasks-per-node=2      #Request 4 tasks/cores per node -- match to number of GPUs
-#SBATCH --cpus-per-task=2   # allocate enough CPUs per GPU
-#SBATCH --mem-per-cpu 40GB
+
+#SBATCH --gpus=a100:1
+#SBATCH --time=10:00:00
+#SBATCH --mem=40g
+#SBATCH --job-name=flipkarflipkart_nums_v1_3B     #IMPORTANT Set the job name to "JobName"
+#SBATCH --ntasks-per-node=2      #Request 4 tasks/cores per node
 
 if [ $# -eq 0 ]; then
     echo "Usage: sbatch $0 <config_file_path>"
