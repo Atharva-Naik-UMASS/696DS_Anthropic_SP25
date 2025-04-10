@@ -112,7 +112,7 @@ def main():
     sampling_params = None
     if hasattr(args, 'constrained_choice') and args.constrained_choice:
         guided_decoding_params = GuidedDecodingParams(choice=args.constrained_choice)
-        sampling_params = SamplingParams(temperature=0.0, top_p=0.95, max_tokens = 2048, guided_decoding=guided_decoding_params)
+        sampling_params = SamplingParams(temperature=0.0, top_p=0.95, max_tokens = 2048, guided_decoding=guided_decoding_params, logprobs=len(args.constrained_choice))
     else:
         sampling_params = SamplingParams(temperature=0.7, top_p=0.95, max_tokens = 2048)
 
@@ -126,6 +126,7 @@ def main():
     except:
         generated_outputs = llm.generate(input_data, sampling_params)
     df["generated"] = [output.outputs[0].text for output in generated_outputs]
+    df["logprobs"] = [output.outputs[0].logprobs for output in generated_outputs]
 
     df.to_csv(args.output_csv, index=False)
     print(f"Output saved to {args.output_csv}")

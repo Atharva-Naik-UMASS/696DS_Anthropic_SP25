@@ -12,11 +12,11 @@ conda activate /work/pi_wenlongzhao_umass_edu/6/envs/anthro_finetune
 #                  --input_fields Formatted \
 #                  --output_csv generated_output_adapter.csv
 
-python eval_models.py /project/pi_wenlongzhao_umass_edu/6/outputs/results_3b/generated/generated_output_pile_adapter_pile_guided.csv \
-                /project/pi_wenlongzhao_umass_edu/6/outputs/results_3b/generated/generated_output_pile_adapter_pile_guided.csv \
-                toxicity \
+python eval_models.py /project/pi_wenlongzhao_umass_edu/6/outputs/results_3b/generated/generated_output_pile_adapter_amazon_guided.csv \
+                /project/pi_wenlongzhao_umass_edu/6/outputs/results_3b/generated/generated_output_pile_adapter_amazon_guided.csv \
+                class_index \
                 generated \
                 output_accuracy.csv \
-                /project/pi_wenlongzhao_umass_edu/6/outputs/results_3b/scored_results/scored_results_pile_pile_guided.csv \
+                /project/pi_wenlongzhao_umass_edu/6/outputs/results_3b/scored_results/scored_results_pile_amazon_guided.csv \
                 accuracy
                  
