@@ -1,13 +1,13 @@
 import pandas as pd
 
-df1 = pd.read_csv('/work/pi_wenlongzhao_umass_edu/6/outputs/scored_results/scored_results_goat_gsm8k.csv')
-df2 = pd.read_csv('/work/pi_wenlongzhao_umass_edu/6/outputs/scored_results/scored_results_goat_gsm8k_2.csv')
+df1 = pd.read_csv('/project/pi_wenlongzhao_umass_edu/6/outputs/results_3b/scored_results/scored_results_base_paws_guided.csv')
+df2 = pd.read_csv('/project/pi_wenlongzhao_umass_edu/6/outputs/results_3b/scored_results/scored_results_mnli_english_paws_guided.csv')
 
 # Create a boolean mask for rows where the 'score' differs
 mask = df1['score'] != df2['score']
 
 comparison = pd.DataFrame({
-    'answer': df1['answer'],
+    'label': df1['label'],
     'Text': df1['Text'],
     'generated_model1': df1['generated'],
     'generated_model2': df2['generated'],

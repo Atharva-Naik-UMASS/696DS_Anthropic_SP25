@@ -1,0 +1,8 @@
+defaults:
+- ../base_configs/generate_base.yaml
+- ../adapter_configs/paws.yaml
+- ../dataset_configs/amazon.yaml
+
+constrained_choice: ["1", "2", "3", "4", "5"]
+shots: 0
+output_csv: /project/pi_wenlongzhao_umass_edu/6/outputs/results_3b/generated/generated_output_paws_adapter_amazon_guided.csv

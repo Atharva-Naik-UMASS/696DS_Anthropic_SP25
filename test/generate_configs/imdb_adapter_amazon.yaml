@@ -3,5 +3,6 @@ defaults:
 - ../adapter_configs/imdb.yaml
 - ../dataset_configs/amazon.yaml
 
+constrained_choice: ["1", "2", "3", "4", "5"]
 shots: 0
-output_csv: /work/pi_wenlongzhao_umass_edu/6/outputs/generated_output_imdb_adapter_amazon_v3_guided.csv
+output_csv: /project/pi_wenlongzhao_umass_edu/6/outputs/results_3b/generated/generated_output_imdb_adapter_amazon_guided.csv
