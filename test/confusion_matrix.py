@@ -16,7 +16,7 @@ def main():
 
     df = pd.read_csv(file_name) 
 
-    match = re.search(r"scored_results_([^_]+)_(.+)\.csv", file_name)
+    match = re.search(r"scored_results_(.+?)_adapter_(.+)\.csv", file_name)
 
     adapter = "Unknown"
     dataset_name = "Unknown"
