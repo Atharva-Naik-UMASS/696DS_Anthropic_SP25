@@ -1,0 +1,17 @@
+#!/bin/bash
+#SBATCH --partition=cpu-preempt
+#SBATCH --mem=20GB
+#SBATCH --time=04:00:00
+
+if [ $# -eq 0 ]; then
+    echo "Usage: sbatch $0 <csv_file_path> <yaml_file_path>"
+    exit 1
+fi
+
+CSV_FILE=$1
+YAML_FILE=$2
+
+module load conda/latest
+conda activate /work/pi_wenlongzhao_umass_edu/6/envs/anthro_finetune
+python test/confusion_matrix.py /project/pi_wenlongzhao_umass_edu/6/outputs/results_3b/scored_results/scored_results_$CSV_FILE \
+        test/dataset_configs/$YAML_FILE
