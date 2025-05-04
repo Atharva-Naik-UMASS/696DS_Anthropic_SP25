@@ -1,143 +1,131 @@
-import os
-os.environ["UNSLOTH_RETURN_LOGITS"] = "1"
-
+from unsloth import FastLanguageModel
+from datasets import load_dataset
+from trl import SFTTrainer
+from transformers import TrainingArguments, DataCollatorForLanguageModeling
+from unsloth import is_bfloat16_supported
 import argparse
 import yaml
+import os
 from datetime import datetime
-from functools import partial
-
-from datasets import load_dataset
-from transformers import DataCollatorForLanguageModeling
-from trl import SFTTrainer, SFTConfig
-
-from unsloth import FastLanguageModel, is_bfloat16_supported
-from transformers import default_data_collator
+from peft import PeftConfig
 
 
-def parse_args():
-    parser = argparse.ArgumentParser(description="Load arguments from YAML config")
-    parser.add_argument("config_path", type=str, help="Path to YAML config file")
+def ArgParser():
+
+    parser = argparse.ArgumentParser(
+        description="Load arguments from YAML config")
+    parser.add_argument("config_path", type=str,
+                        help="Path to YAML config file")
+
+    # Add any additional command-line arguments that might override YAML settings
     args = parser.parse_args()
     with open(args.config_path, "r") as f:
         config = yaml.safe_load(f)
+
     return argparse.Namespace(**config)
 
 
-def preprocess_for_label_only(examples, tokenizer, text_column, max_seq_length):
-    inputs = examples[text_column]
-    
-    # Process inputs first to get tokenized outputs
-    tokenized = tokenizer(
-        inputs, 
-        padding="max_length",
-        truncation=True,
-        max_length=max_seq_length,
-        return_tensors=None
-    )
-    
-    # Initialize labels with -100 (masked tokens that don't contribute to loss)
-    labels_list = []
-    for idx, text in enumerate(inputs):
-        lines = text.strip().split("\n")
-        label_line = lines[-1].replace("<|end_of_text|>", "").strip()
-        label_ids = tokenizer.convert_tokens_to_ids(tokenizer.tokenize(label_line))
-        input_ids = tokenized["input_ids"][idx]
-
-        # initialize all masked
-        labels = [-100] * len(input_ids)
-        # locate label tokens
-        for i in range(len(input_ids) - len(label_ids) + 1):
-            if input_ids[i : i + len(label_ids)] == label_ids:
-                for offset in range(len(label_ids)):
-                    labels[i + offset] = input_ids[i + offset]
-                break
-        labels_list.append(labels)
-
-    tokenized["labels"] = labels_list
-    # Ensure labels length matches input_ids
-    assert len(tokenized["labels"][0]) == len(tokenized["input_ids"][0]), "Labels and input_ids length mismatch"
-    return tokenized
-
-
 def train():
-    args = parse_args()
-    dataset = load_dataset(args.data_dir, data_files=args.datafile, split="train")
+    args = ArgParser()
+    # Choose any! We auto support RoPE Scaling internally!
+    max_seq_length = args.max_seq_length
+    # None for auto detection. Float16 for Tesla T4, V100, Bfloat16 for Ampere+
+    dtype = args.dtype
+    # Use 4bit quantization to reduce memory usage. Can be False.
+    load_in_4bit = args.load_in_4bit
+    data_dir = args.data_dir
+    dataset = load_dataset(data_dir, data_files=args.datafile, split="train")
 
-    # Load model and tokenizer
     model, tokenizer = FastLanguageModel.from_pretrained(
         model_name=args.model_path,
-        max_seq_length=args.max_seq_length,
-        dtype=args.dtype,
-        load_in_4bit=args.load_in_4bit,
+        max_seq_length=max_seq_length,
+        dtype=dtype,
+        load_in_4bit=load_in_4bit,
     )
     model = FastLanguageModel.get_peft_model(
         model,
-        r=args.lora_rank,
+        r=args.lora_rank,  # Choose any number > 0 ! Suggested 8, 16, 32, 64, 128
         target_modules=args.target_modules,
         lora_alpha=args.lora_alpha,
-        lora_dropout=args.lora_dropout,
-        bias=args.lora_bias,
+        lora_dropout=args.lora_dropout,  # Supports any, but = 0 is optimized
+        bias=args.lora_bias,    # Supports any, but = "none" is optimized
+        # [NEW] "unsloth" uses 30% less VRAM, fits 2x larger batch sizes!
+        # True or "unsloth" for very long context
         use_gradient_checkpointing=args.use_gradient_checkpointing,
-        use_rslora=args.use_rslora,
-        loftq_config=args.loftq_config,
+        use_rslora=args.use_rslora,  # We support rank stabilized LoRA
+        loftq_config=args.loftq_config,  # And LoftQ
     )
 
-    # Optionally load existing adapter
-    if getattr(args, 'load_adapter', None):
-        if os.path.isdir(args.load_adapter):
-            model.load_adapter(args.load_adapter, adapter_name='default')
+    if hasattr(args, 'load_adapter') and args.load_adapter:
+        adapter_path = args.load_adapter
+        if os.path.exists(adapter_path):
+            print(f"Loading adapter weights from {adapter_path}")
+            model.load_adapter(adapter_path, adapter_name='default')
+
         else:
-            print(f"Adapter path {args.load_adapter} not found; training from scratch.")
+            print(
+                f"Warning: Adapter path {adapter_path} not found. Training from scratch.")
 
-    # Prepare dataset
-    preprocess_fn = partial(preprocess_for_label_only, tokenizer=tokenizer, text_column=args.dataset_text_field, max_seq_length=args.max_seq_length)
-    tokenized_ds = dataset.map(
-        preprocess_fn,
-        batched=True,
-        remove_columns=dataset.column_names,
-        num_proc=args.dataset_num_proc,
-    )
+    if args.dataset_text_field != "false":
+        dataset_text_field = args.dataset_text_field
+    else:
+        dataset_text_field = "text"
 
-    # Setup trainer
-    run_name = args.wandb_run_name if hasattr(args, 'wandb_run_name') else f"finetune-{datetime.now():%Y%m%d_%H%M%S}"
-    training_args = SFTConfig(
-        output_dir=os.path.join(args.output_dir, run_name),
-        per_device_train_batch_size=args.per_device_train_batch_size,
-        gradient_accumulation_steps=args.gradient_accumulation_steps,
-        num_train_epochs=args.num_train_epochs,
-        learning_rate=args.learning_rate,
-        warmup_steps=args.warmup_steps,
-        weight_decay=args.weight_decay,
-        optim=args.optim,
-        lr_scheduler_type=args.lr_scheduler_type,
-        fp16=not is_bfloat16_supported(),
-        bf16=is_bfloat16_supported(),
-        logging_steps=args.logging_steps,
-        report_to=args.report_to,
-        run_name=run_name,
-        max_seq_length=args.max_seq_length,
-        remove_unused_columns=False,
-        dataset_text_field=args.dataset_text_field,
-        dataset_kwargs={"skip_prepare_dataset": True},
-        packing=False,
-    )
-    
+    current_time = datetime.now().strftime("%Y%m%d-%H%M%S")
+    dataset_name = args.datafile.split(
+        '.')[0] if '.' in args.datafile else args.datafile
+    run_name = args.wandb_run_name if hasattr(
+        args, 'wandb_run_name') else f"{dataset_name}-{current_time}"
+
     trainer = SFTTrainer(
         model=model,
         tokenizer=tokenizer,
-        train_dataset=tokenized_ds,  # Use the tokenized_ds with our custom preprocessing
-        data_collator=default_data_collator,  # Use the default collator since we already created labels
-        args=training_args,
+        train_dataset=dataset,
+        dataset_text_field=dataset_text_field,
+        max_seq_length=max_seq_length,
+        data_collator=DataCollatorForLanguageModeling(
+            tokenizer=tokenizer, mlm=False),
+        dataset_num_proc=args.dataset_num_proc,
+        # Can make training 5x faster for short sequences.
+        packing=args.packing,
+        args=TrainingArguments(
+            per_device_train_batch_size=args.per_device_train_batch_size,
+            gradient_accumulation_steps=args.gradient_accumulation_steps,
+            warmup_steps=args.warmup_steps,
+            # Set this for 1 full training run.
+            num_train_epochs=args.num_train_epochs,
+            # max_steps = args.max_steps,
+            learning_rate=args.learning_rate,
+            fp16=not is_bfloat16_supported(),
+            bf16=is_bfloat16_supported(),
+            logging_steps=args.logging_steps,
+            optim=args.optim,
+            weight_decay=args.weight_decay,
+            lr_scheduler_type=args.lr_scheduler_type,
+            output_dir=os.path.join(args.output_dir, run_name),
+            report_to=args.report_to,
+            run_name=run_name
+        ),
     )
 
-    trainer.train()
+    trainer_stats = trainer.train()
+    # To store the merged model
+    # model.save_pretrained_merged("/work/pi_wenlongzhao_umass_edu/6/unsloth_test_model", tokenizer, save_method = "merged_16bit")
 
-    # Save adapter
-    save_path = os.path.join(args.output_dir, run_name)
-    os.makedirs(save_path, exist_ok=True)
-    model.save_pretrained(save_path)
-    tokenizer.save_pretrained(save_path)
-    print(f"Saved adapter and tokenizer at {save_path}")
+    # To store the adapters
+    try:
+        output_path = os.path.join(args.output_dir, run_name)
+        os.makedirs(output_path, exist_ok=True)
+        model.save_pretrained(output_path)
+        tokenizer.save_pretrained(output_path)
+        print(f"Saved model and tokenizer to {output_path}")
+    except Exception as e:
+        # Local saving
+        print("Cannot find output directory, saving in current directory instead")
+        path = os.path.join('adapters', run_name)
+        os.makedirs(path, exist_ok=True)
+        model.save_pretrained(path)
+        tokenizer.save_pretrained(path)
 
 
 if __name__ == "__main__":
